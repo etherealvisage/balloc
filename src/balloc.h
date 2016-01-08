@@ -1,3 +1,12 @@
+/*
+    Block allocator implementation, header file.
+
+    This implementation was written by Kent "ethereal" Williams-King and is
+    hereby released into the public domain. Do what you wish with it.
+
+    No guarantees as to the correctness of the implementation are provided.
+*/
+
 #ifndef BALLOC_H
 #define BALLOC_H
 
