@@ -28,33 +28,28 @@ int main() {
     size_t size = balloc_calculate_size(4);
     balloc_allocator_t *allocator = malloc(size);
     balloc_setup_allocator(allocator, size);
-
-    balloc_add_region(allocator, malloc(1024), 1024, 64);
-    balloc_add_region(allocator, malloc(1024), 1024, 16);
-    balloc_add_region(allocator, malloc(1024), 1024, 128);
-
     balloc_set_default_allocator(allocator);
 
-    void *p1 = balloc_allocate(32);
-    print_error();
-    printf("p1: %p\n", p1);
-    void *p2 = balloc_allocate(14);
-    print_error();
-    printf("p2: %p\n", p2);
-    void *p3 = balloc_allocate(129);
-    print_error();
-    printf("p3: %p\n", p3);
+    balloc_add_region(allocator, malloc(1<<30), 1<<30, 32);
+    balloc_add_region(allocator, malloc(1<<30), 1<<30, 64);
+    balloc_add_region(allocator, malloc(1<<30), 1<<30, 128);
+    balloc_add_region(allocator, malloc(1<<30), 1<<30, 16);
 
-    balloc_free(p1);
-    print_error();
-    p1 = 0;
-    p1 = balloc_allocate(32);
-    print_error();
-    printf("p1: %p\n", p1);
+    void **ptrs = malloc(sizeof(void *) * (1<<24));
+    int i;
+    for(i = 0; i < 1<<24; i ++) {
+        ptrs[i] = (void *)1;
+    }
+    for(i = 0; i < 1<<24; i ++) {
+        ptrs[i] = balloc_allocate(16);
+        /*ptrs[i] = malloc(16);*/
+    }
 
-    balloc_free(p3);
-    print_error();
-    printf("p3: %p\n", p3);
+    for(i = 0; i < 1<<24; i ++) {
+        balloc_free(ptrs[i]);
+        /*free(ptrs[i]);*/
+    }
 
     return 0;
 }
+
